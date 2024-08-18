@@ -22,7 +22,7 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
 
     /**
-     * 新增菜品
+     * 新增菜品和对应口味
      * @param dishDTO
      * @return
      */
