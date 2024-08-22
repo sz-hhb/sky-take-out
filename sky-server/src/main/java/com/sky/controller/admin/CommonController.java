@@ -49,6 +49,6 @@ public class CommonController {
         } catch (IOException e) {
            log.error("上传文件失败: {}", e);
         }
-        return Result.success(MessageConstant.UPLOAD_FAILED);
+        return Result.error(MessageConstant.UPLOAD_FAILED);
     }
 }
