@@ -47,12 +47,12 @@ public class DishServiceImpl implements DishService {
         dishMapper.insert(dish);
 
         // 获取insert语句生成的主键值
-        Long id = dish.getId();
+        Long dishId = dish.getId();
 
         List<DishFlavor> flavors = dishDTO.getFlavors();
         if (flavors != null && !flavors.isEmpty()) {
             flavors.forEach(dishFlavor -> {
-                dishFlavor.setDishId(id);
+                dishFlavor.setDishId(dishId);
             });
 
             // 口味表插入n条数据
@@ -106,5 +106,50 @@ public class DishServiceImpl implements DishService {
 
         // 根据菜品id批量删除口味
         dishFlavorMapper.deleteByDishIds(ids);
+    }
+
+    /**
+     * 根据id查询菜品和口味
+     * @param id
+     * @return
+     */
+    public DishVO getByIdWithFlavor(Long id) {
+        // 根据id查询菜品
+        Dish dish = dishMapper.getById(id);
+
+        // 根据菜品id查询口味
+        List<DishFlavor> dishFlavors = dishFlavorMapper.getByDishId(id);
+
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(dishFlavors);
+
+        return dishVO;
+    }
+
+    /**
+     * 修改菜品
+     * @param dishDTO
+     */
+    public void updateWithFlavor(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+
+        // 修改菜品基本信息
+        dishMapper.update(dish);
+
+        // 删除菜品原有口味
+        dishFlavorMapper.deleteByDishId(dish.getId());
+
+        // 插入新口味
+        List<DishFlavor> dishFlavors = dishDTO.getFlavors();
+
+        if (dishFlavors != null && !dishFlavors.isEmpty()) {
+            dishFlavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dish.getId());
+            });
+
+            dishFlavorMapper.insertBatch(dishFlavors);
+        }
     }
 }
