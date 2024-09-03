@@ -19,8 +19,8 @@ public interface OrderMapper {
      * 根据订单号查询订单
      * @param orderNumber
      */
-    @Select("select * from orders where number = #{orderNumber}")
-    Orders getByNumber(String orderNumber);
+    @Select("select * from orders where number = #{orderNumber} and user_id = #{userId}")
+    Orders getByNumberAndUserId(String orderNumber, Long userId);
 
     /**
      * 修改订单信息
@@ -30,7 +30,7 @@ public interface OrderMapper {
 
     /**
      * 获取超时订单
-     * @param pendingPayment
+     * @param status
      * @param time
      */
     @Select("select * from orders where status = #{status} and order_time < #{time}")
