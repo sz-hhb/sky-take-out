@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 @Controller
@@ -88,5 +89,15 @@ public class ReportController {
     ) {
         log.info("销量统计: {}, {}", begin, end);
         return Result.success(reportService.getSaleTop10Statistics(begin, end));
+    }
+
+    /**
+     * 导出运营数据报表
+     * @param response
+     */
+    @GetMapping("/export")
+    @ApiOperation("导出运营数据报表")
+    public void export(HttpServletResponse response) {
+        reportService.exportBusinessData(response);
     }
 }
