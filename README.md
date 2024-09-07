@@ -10,3 +10,4 @@
   * Nginx
   * Spring Boot、Spring MVC、Spring Task、Spring Cache、JWT、POI、阿里云OSS、Swagger、WebSocket
   * Mysql、Redis、MyBatis、Spring Data Redis
+  * Git、Maven
