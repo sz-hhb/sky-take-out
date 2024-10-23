@@ -1,7 +1,9 @@
 package com.sky.controller.admin;
 
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -119,6 +121,34 @@ public class DishController {
         clearCache("dish_*");
 
         return Result.success();
+    }
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
+    public Result<List<DishVO>> list(Long categoryId) {
+
+        // 构造Redis中的key 规则 dish_分类id
+        String key = "dish_" + categoryId;
+
+        // 查询redis中是否存在菜品数据
+        List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        if (list != null && !list.isEmpty()) {
+            return Result.success(list);
+        }
+
+        Dish dish = new Dish();
+        dish.setCategoryId(categoryId);
+        dish.setStatus(StatusConstant.ENABLE); //查询起售中的菜品
+
+        list = dishService.listWithFlavor(dish);
+        redisTemplate.opsForValue().set(key, list);
+
+        return Result.success(list);
     }
 
     /**

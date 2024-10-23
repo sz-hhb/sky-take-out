@@ -22,5 +22,5 @@ public interface UserMapper {
      * @param map
      * @return
      */
-    Integer countByMap(Map map);
+    Integer countByMap(Map<String, Object> map);
 }

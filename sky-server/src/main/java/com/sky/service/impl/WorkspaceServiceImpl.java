@@ -70,7 +70,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             //平均客单价
             unitPrice = turnover / validOrderCount;
         }
-
+        log.info("map: {}", map);
         //新增用户数
         Integer newUsers = userMapper.countByMap(map);
 
